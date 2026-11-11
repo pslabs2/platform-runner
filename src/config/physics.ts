@@ -1,0 +1,15 @@
+export const PHYSICS = {
+  gravity: 1400,
+  jumpVelocity: -420,
+  doubleJumpVelocity: -380,
+  jumpCutMultiplier: 0.45,
+  maxFallSpeed: 600,
+  fastFallSpeed: 750,
+  coyoteTimeMs: 100,
+  jumpBufferMs: 120,
+  tileSize: 18,
+  playerWidth: 14,
+  playerHeight: 18,
+  groundY: 234,
+  respawnInvulnerabilityMs: 1500,
+} as const;
