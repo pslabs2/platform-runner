@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { createButton } from '../ui/Button';
+import { MenuNavigator } from '../ui/MenuNavigator';
 import { LocalLeaderboardStore } from '../storage/LocalLeaderboardStore';
 import { Parallax } from '../systems/Parallax';
 import { gameAudio } from '../systems/Audio';
@@ -27,11 +28,14 @@ export class TitleScene extends Phaser.Scene {
       color: '#ffcd75',
     }).setOrigin(0.5);
 
-    createButton(this, 240, 122, 'PLAY', () => this.startRun());
-    createButton(this, 240, 158, 'LEADERBOARD', () => {
+    const play = createButton(this, 240, 122, 'PLAY', () => this.startRun());
+    const leaderboard = createButton(this, 240, 158, 'LEADERBOARD', () => {
       this.scene.launch('LeaderboardScene', { returnTo: 'TitleScene' });
     });
-    this.add.text(240, 194, 'SPACE / W / ↑  JUMP     S / ↓  FAST-FALL', {
+    new MenuNavigator(this, [play, leaderboard], {
+      enabled: () => !this.scene.isActive('LeaderboardScene'),
+    });
+    this.add.text(240, 194, 'SPACE / W / ↑  JUMP     S / ↓  FAST-FALL     ENTER  SELECT', {
       fontFamily: 'monospace',
       fontSize: '8px',
       color: '#f4f4f4',
@@ -50,8 +54,6 @@ export class TitleScene extends Phaser.Scene {
       bestText.setText(`BEST  ${entries[0]?.score ?? 0}`);
     });
 
-    const jumpKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-    jumpKey?.once('down', () => this.startRun());
   }
 
   update(_time: number, delta: number): void {

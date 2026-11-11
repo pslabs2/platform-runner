@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { createButton } from '../ui/Button';
+import { MenuNavigator } from '../ui/MenuNavigator';
 import { LocalLeaderboardStore } from '../storage/LocalLeaderboardStore';
 
 interface LeaderboardData {
@@ -44,7 +45,8 @@ export class LeaderboardScene extends Phaser.Scene {
         });
       });
     });
-    createButton(this, 240, 238, 'BACK', () => this.scene.stop());
+    const back = createButton(this, 240, 238, 'BACK', () => this.scene.stop());
+    new MenuNavigator(this, [back]);
     this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC).once('down', () => {
       this.scene.stop();
     });

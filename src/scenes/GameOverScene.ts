@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { createButton } from '../ui/Button';
+import { MenuNavigator } from '../ui/MenuNavigator';
 import { LocalLeaderboardStore } from '../storage/LocalLeaderboardStore';
 import { GAMEPLAY } from '../config/gameplay';
 
@@ -16,6 +17,7 @@ export class GameOverScene extends Phaser.Scene {
   private initialsText!: Phaser.GameObjects.Text;
   private statusText!: Phaser.GameObjects.Text;
   private eligible = false;
+  private menu!: MenuNavigator;
 
   constructor() {
     super('GameOverScene');
@@ -48,8 +50,13 @@ export class GameOverScene extends Phaser.Scene {
       fontSize: '22px',
       color: '#ffffff',
     }).setOrigin(0.5).setVisible(false);
-    createButton(this, 240, 190, 'SAVE SCORE', () => this.submitScore());
-    createButton(this, 240, 226, 'TITLE', () => this.scene.start('TitleScene'));
+    const save = createButton(this, 240, 190, 'SAVE SCORE', () => this.submitScore());
+    const title = createButton(this, 240, 226, 'TITLE', () => this.scene.start('TitleScene'));
+    // Letters are used for initials entry, so only arrows/Enter navigate while eligible.
+    this.menu = new MenuNavigator(this, [save, title], {
+      letterKeys: () => !this.eligible,
+      confirmKeys: false,
+    });
 
     this.input.keyboard?.on('keydown', this.handleKey, this);
     void this.leaderboard.isHighScore(this.score).then((eligible) => {
@@ -74,7 +81,7 @@ export class GameOverScene extends Phaser.Scene {
     } else if (/^[a-z]$/i.test(event.key) && this.initials.length < 3) {
       this.initials += event.key.toUpperCase();
     } else if (event.key === 'Enter') {
-      this.submitScore();
+      this.menu.activateSelected();
     }
     this.initialsText.setText(this.initials.padEnd(3, '_'));
   }

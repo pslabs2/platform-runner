@@ -75,7 +75,9 @@ export class GameScene extends Phaser.Scene {
     this.parallax = new Parallax(this);
     this.effects = new Effects(this);
     this.spawner = new ChunkSpawner(this);
-    const firstZone = this.spawnZone(1, 0, PHYSICS.groundY);
+    const runwayWidth = GAMEPLAY.startRunwayTiles * PHYSICS.tileSize;
+    this.spawner.spawnSafeRunway(0, PHYSICS.groundY, runwayWidth);
+    const firstZone = this.spawnZone(1, runwayWidth, PHYSICS.groundY);
     this.player = new Player(this, PHYSICS.tileSize * 4, PHYSICS.groundY - PHYSICS.playerHeight / 2);
     this.initialX = this.player.x;
     this.physics.add.collider(this.player, this.spawner.platforms, (_player, object) => {
