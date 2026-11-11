@@ -12,6 +12,7 @@ export const GAMEPLAY = {
   coinPoolSize: 80,
   hazardPoolSize: 24,
   checkpointPoolSize: 4,
+  startRunwayTiles: 24,
   recycleMargin: 96,
   streamAhead: 480,
   hitStopMs: 60,

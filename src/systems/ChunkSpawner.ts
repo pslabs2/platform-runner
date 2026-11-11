@@ -111,8 +111,11 @@ export class ChunkSpawner {
     };
   }
 
-  spawnSafeRunway(x: number, top: number): void {
-    const width = GAMEPLAY.zoneChunkWidthTiles * PHYSICS.tileSize;
+  spawnSafeRunway(
+    x: number,
+    top: number,
+    width: number = GAMEPLAY.zoneChunkWidthTiles * PHYSICS.tileSize,
+  ): void {
     const centerX = x + width / 2;
     const centerY = top + PHYSICS.tileSize / 2;
     if (

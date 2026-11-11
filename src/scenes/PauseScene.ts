@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { createButton } from '../ui/Button';
+import { MenuNavigator } from '../ui/MenuNavigator';
 import { gameAudio } from '../systems/Audio';
 
 export class PauseScene extends Phaser.Scene {
@@ -14,17 +15,18 @@ export class PauseScene extends Phaser.Scene {
       fontSize: '25px',
       color: '#ffffff',
     }).setOrigin(0.5);
-    createButton(this, 240, 120, 'RESUME', () => this.resumeGame());
-    createButton(this, 240, 156, `SOUND ${gameAudio.isMuted ? 'OFF' : 'ON'}`, () => {
+    const resume = createButton(this, 240, 120, 'RESUME', () => this.resumeGame());
+    const sound = createButton(this, 240, 156, `SOUND ${gameAudio.isMuted ? 'OFF' : 'ON'}`, () => {
       gameAudio.toggleMute();
       this.scene.restart();
     });
-    createButton(this, 240, 192, 'TITLE', () => {
+    const title = createButton(this, 240, 192, 'TITLE', () => {
       this.scene.stop('PauseScene');
       this.scene.stop('HUDScene');
       this.scene.stop('GameScene');
       this.scene.start('TitleScene');
     });
+    new MenuNavigator(this, [resume, sound, title]);
 
     const escape = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     const pause = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.P);
