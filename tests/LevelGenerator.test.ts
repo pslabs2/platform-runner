@@ -10,11 +10,13 @@ describe('generateZone', () => {
   });
 
   it('keeps generated gaps reachable through zone 20', () => {
-    for (let zone = 1; zone <= 20; zone += 1) {
-      const { runSpeed } = getDifficulty(zone);
-      for (const chunk of generateZone(2026, zone)) {
-        if (chunk.gapTiles > 0) {
-          expect(canReachGap(chunk.gapTiles, chunk.heightDeltaTiles, runSpeed)).toBe(true);
+    for (const seed of [1, 42, 2026]) {
+      for (let zone = 1; zone <= 20; zone += 1) {
+        const { runSpeed } = getDifficulty(zone);
+        for (const chunk of generateZone(seed, zone)) {
+          if (chunk.gapTiles > 0) {
+            expect(canReachGap(chunk.gapTiles, chunk.heightDeltaTiles, runSpeed)).toBe(true);
+          }
         }
       }
     }

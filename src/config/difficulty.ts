@@ -1,5 +1,6 @@
 import { PHYSICS } from './physics';
 import { maxReachableGapTiles } from '../systems/Reachability';
+import { GAMEPLAY } from './gameplay';
 
 export interface DifficultyParams {
   zone: number;
@@ -8,8 +9,15 @@ export interface DifficultyParams {
   maxHeightDeltaTiles: number;
   hazardChance: number;
   chunkCount: number;
-  unlockedHazards: string[];
+  unlockedHazards: HazardKind[];
 }
+
+export type HazardKind =
+  | 'spikes'
+  | 'crumbling'
+  | 'moving-vertical'
+  | 'moving-horizontal'
+  | 'walker';
 
 const HAZARDS = [
   { zone: 2, kind: 'spikes' },
@@ -32,7 +40,10 @@ export function getDifficulty(zone: number): DifficultyParams {
     ),
     maxHeightDeltaTiles: Math.min(1 + (level - 1) * 0.5, 4),
     hazardChance: Math.min((level - 1) * 0.08, 0.6),
-    chunkCount: Math.min(6 + level - 1, 14),
+    chunkCount: Math.min(
+      GAMEPLAY.startingZoneChunkCount + level - 1,
+      GAMEPLAY.maxZoneChunkCount,
+    ),
     unlockedHazards: HAZARDS.filter((hazard) => level >= hazard.zone).map(
       (hazard) => hazard.kind,
     ),

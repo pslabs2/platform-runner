@@ -7,23 +7,25 @@ import { HUDScene } from '../scenes/HUDScene';
 import { PauseScene } from '../scenes/PauseScene';
 import { GameOverScene } from '../scenes/GameOverScene';
 import { LeaderboardScene } from '../scenes/LeaderboardScene';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from './screen';
+import { PHYSICS } from './physics';
 
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game',
-  width: 480,
-  height: 270,
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
   pixelArt: true,
   roundPixels: true,
   backgroundColor: '#1d2b53',
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.NONE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { x: 0, y: 1400 },
+      gravity: { x: 0, y: PHYSICS.gravity },
       debug: false,
     },
   },

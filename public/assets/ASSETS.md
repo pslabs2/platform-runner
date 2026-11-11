@@ -21,4 +21,9 @@ are stored locally — no hotlinking.
    and `License.txt` into `public/assets/kenney/pixel-platformer/`.
 3. Load as spritesheets with `frameWidth: 18, frameHeight: 18`.
 
+The loader uses these local sheets when present. If they are not installed, it
+generates 18×18 placeholder textures for the player, platforms, coins, hazards,
+checkpoint flag and particles, so the game remains playable. No remote assets
+are requested.
+
 Credit (optional but appreciated): "Art by Kenney.nl".

@@ -28,11 +28,13 @@ export function canReachGap(
   gapTiles: number,
   heightDeltaTiles: number,
   runSpeed: number,
-  safetyMargin = 0.85,
+  safetyMargin = PHYSICS.reachabilitySafetyMargin,
 ): boolean {
   return (
     Number.isFinite(gapTiles) &&
     gapTiles >= 0 &&
-    gapTiles <= maxReachableGapTiles(runSpeed, heightDeltaTiles, PHYSICS) * safetyMargin
+    gapTiles <=
+      maxReachableGapTiles(runSpeed, heightDeltaTiles, PHYSICS) *
+        Math.min(safetyMargin, PHYSICS.reachabilitySafetyMargin)
   );
 }

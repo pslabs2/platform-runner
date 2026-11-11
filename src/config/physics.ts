@@ -12,4 +12,5 @@ export const PHYSICS = {
   playerHeight: 18,
   groundY: 234,
   respawnInvulnerabilityMs: 1500,
+  reachabilitySafetyMargin: 0.85,
 } as const;

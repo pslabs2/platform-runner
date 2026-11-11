@@ -2,6 +2,8 @@ import { PHYSICS } from '../config/physics';
 import { getDifficulty } from '../config/difficulty';
 import { canReachGap } from './Reachability';
 import { createRng } from './Rng';
+import { GAMEPLAY } from '../config/gameplay';
+import type { HazardKind } from '../config/difficulty';
 
 export interface ChunkSpec {
   index: number;
@@ -9,7 +11,7 @@ export interface ChunkSpec {
   gapTiles: number;
   heightDeltaTiles: number;
   coins: Array<{ x: number; y: number }>;
-  hazard: string | null;
+  hazard: HazardKind | null;
   checkpoint: boolean;
   safe: boolean;
 }
@@ -24,8 +26,9 @@ export function generateZone(seed: number, zone: number): ChunkSpec[] {
     let heightDeltaTiles = 0;
     if (!safe) {
       const maxHeight = Math.floor(difficulty.maxHeightDeltaTiles);
-      for (let attempt = 0; attempt < 20; attempt += 1) {
-        const proposedGap = Math.floor(random() * difficulty.maxGapWidthTiles) + 1;
+      for (let attempt = 0; attempt < GAMEPLAY.maxJumpAttempts; attempt += 1) {
+        const proposedGap =
+          Math.floor(random() * Math.floor(difficulty.maxGapWidthTiles)) + 1;
         const proposedHeight = Math.floor(random() * (maxHeight * 2 + 1)) - maxHeight;
         if (canReachGap(proposedGap, proposedHeight, difficulty.runSpeed)) {
           gapTiles = proposedGap;
@@ -43,14 +46,14 @@ export function generateZone(seed: number, zone: number): ChunkSpec[] {
             Math.floor(random() * difficulty.unlockedHazards.length)
           ] ?? null
         : null;
-    const coins = Array.from({ length: safe ? 0 : 3 }, (_, coinIndex) => ({
+    const coins = Array.from({ length: safe ? 0 : GAMEPLAY.coinsPerChunk }, (_, coinIndex) => ({
       x: (coinIndex + 2) * PHYSICS.tileSize,
       y: PHYSICS.groundY - 38 - Math.floor(random() * 12),
     }));
 
     return {
       index,
-      widthTiles: 12,
+      widthTiles: GAMEPLAY.zoneChunkWidthTiles,
       gapTiles,
       heightDeltaTiles,
       coins,
